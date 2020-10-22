@@ -7,8 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-// Add the System.Data.SqlClient using statement
+using System.Data.SqlClient;
 // Add the ContosoPets.DataAccess.Services using statement
+using ContosoPets.DataAccess.Services;
 
 namespace ContosoPets.Api
 {
@@ -25,10 +26,20 @@ namespace ContosoPets.Api
         public void ConfigureServices(IServiceCollection services)
         {
             // Add the OrderService DI registration code
+            services.AddScoped<OrderService>();
 
             // Add the SqlConnectionStringBuilder code
+            var builder = new SqlConnectionStringBuilder(
+                Configuration.GetConnectionString("ContosoPets"));
+                IConfigurationSection contosoPetsCredentials =
+            Configuration.GetSection("ContosoPetsCredentials");
+
+            builder.UserID = contosoPetsCredentials["UserId"];
+            builder.Password = contosoPetsCredentials["Password"];
 
             // Add the UseSqlServer code
+            services.AddDbContext<ContosoPetsContext>(options =>
+                options.UseSqlServer(builder.ConnectionString));
 
             services.AddControllers();
             services.AddApplicationInsightsTelemetry();

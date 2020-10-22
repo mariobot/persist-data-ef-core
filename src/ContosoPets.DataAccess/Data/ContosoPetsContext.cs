@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 // Add the ContosoPets.Domain.Models using statement
+using ContosoPets.Domain.Models;
 
 namespace ContosoPets.DataAccess.Data
 {
@@ -10,6 +11,9 @@ namespace ContosoPets.DataAccess.Data
         {
         }
 
-        // Add the DbSet<T> properties
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductOrder> ProductOrders { get; set; }
     }
 }
